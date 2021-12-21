@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (C) ATHOS TRADER SL <info@athosonline.com>
+-->
+<view>
+    <columns>
+        <column name="code" order="100">
+            <widget type="text" fieldname="idincidencia" />
+        </column>
+        <column name="observations" order="110">
+            <widget type="text" fieldname="observaciones" />
+        </column>
+        <column name="date" display="right" order="120">
+            <widget type="date" fieldname="fecha" />
+        </column>
+        <column name="user" order="130">
+            <widget type="text" fieldname="nick" />
+        </column>
+    </columns>
+    
+    <rows>
+        <row type="status">
+            <option color="default" fieldname="estado" title="pending">0</option>
+            <option color="success" fieldname="estado" title="approved">1</option>
+        </row>
+    </rows>
+</view>

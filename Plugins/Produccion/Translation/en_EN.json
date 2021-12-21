@@ -1,0 +1,19 @@
+{
+    "ingredient": "Ingredient",
+    "ingredients": "Ingredients",
+    "last-production": "Last production",
+    "max-produce": "Maximum production",
+    "produce": "Produce",
+    "produce-product": "Produce product",
+    "recipe": "Recipe",
+    "recipe-produce-ok": "%quantity% units of the recipe %recipe% have been manufactured.",
+    "recipe-save-error": "Error saving recipe %recipe%",
+    "recipeline-save-error": "Error saving the line %line% of the recipe %recipe%",
+    "recipes": "Recipes",
+    "reference-production": "Result reference (product to be produced)",
+    "reference-raw": "Reference of the raw material (product to consume)",
+    "warehouse-source": "Whse. Source",
+    "warehouse-source-desc": "Warehouse from which the raw material is obtained",
+    "warehouse-target": "Whse. Target",
+    "warehouse-target-desc": "Warehouse where the produced product goes"
+}

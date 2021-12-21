@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Document   : centrocostos.xml
+    Author     : Mauricio Tene
+    Description:
+        Structure of cost center table
+-->
+<table>
+    <column>
+        <name>descripcion</name>
+        <type>character varying(200)</type>
+    </column>
+
+    <column>
+        <name>codcenter</name>
+        <type>character varying(4)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>direccion</name>
+        <type>character varying(100)</type>
+    </column>
+    <column>
+        <name>idempresa</name>
+        <type>integer</type>
+    </column>
+    <column>
+        <name>nombre</name>
+        <type>character varying(100)</type>
+        <null>NO</null>
+    </column>
+    <constraint>
+        <name>costcenter_pkey</name>
+        <type>PRIMARY KEY (codcenter)</type>
+    </constraint>
+    <constraint>
+        <name>ca_costcenter_empresas</name>
+        <type>FOREIGN KEY (idempresa) REFERENCES empresas (idempresa) ON DELETE CASCADE ON UPDATE CASCADE</type>
+    </constraint>
+</table>

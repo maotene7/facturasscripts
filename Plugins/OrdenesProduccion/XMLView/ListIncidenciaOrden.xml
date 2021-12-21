@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (C) ATHOS TRADER SL <info@athosonline.com>
+-->
+<view>
+    <columns>
+        <column name="code" display="none">
+            <widget type="text" fieldname="idio" />
+        </column>
+        <column name="incidence">
+            <widget type="text" fieldname="idincidencia" />
+        </column>
+        <column name="company">
+            <widget type="select" fieldname="idempresa" onclick="EditEmpresa">
+                <values source="empresas" fieldcode="idempresa" fieldtitle="nombre"></values>
+            </widget>
+        </column>
+        <column name="project">
+            <widget type="select" fieldname="idproyecto" onclick="EditProyecto">
+                <values source="proyectos" fieldcode="idproyecto" fieldtitle="nombre"></values>
+            </widget>
+        </column>
+        <column name="task">
+            <widget type="select" fieldname="idtarea" onclick="EditTareaProyecto">
+                <values source="tareas" fieldcode="idtarea" fieldtitle="nombre"></values>
+            </widget>
+        </column>
+        <column name="process">
+            <widget type="select" fieldname="idproceso">
+                <values source="procesos" fieldcode="idproceso" fieldtitle="nombre"></values>
+            </widget>
+        </column>
+        <column name="quantity">
+            <widget type="text" fieldname="cantidadincidencia" />
+        </column>
+    </columns>
+</view>

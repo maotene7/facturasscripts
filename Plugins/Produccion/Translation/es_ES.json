@@ -1,0 +1,19 @@
+{
+    "ingredient": "Ingrediente",
+    "ingredients": "Ingredientes",
+    "last-production": "Últ. producción",
+    "max-produce": "Producción máxima",
+    "produce": "Producir",
+    "produce-product": "Producir producto",
+    "recipe": "Receta",
+    "recipe-produce-ok": "Se han fabricado %quantity% unidades de la receta %recipe%.",
+    "recipe-save-error": "Error al grabar la receta %recipe%",
+    "recipeline-save-error": "Error al grabar la linea %line% de la receta %recipe%",
+    "recipes": "Recetas",
+    "reference-production": "Referencia resultado (producto a producir)",
+    "reference-raw": "Referencia de la materia prima (producto a consumir)",
+    "warehouse-source": "Alm. Origen",
+    "warehouse-source-desc": "Almacén del que se obtiene la materia prima",
+    "warehouse-target": "Alm. Destino",
+    "warehouse-target-desc": "Almacén donde va el producto producido"
+}

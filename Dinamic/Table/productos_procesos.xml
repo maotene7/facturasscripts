@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (C) ATHOS TRADER SL <info@athosonline.com>
+-->
+<table>
+    <column>
+        <name>cantidad</name>
+        <type>integer</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>descripcion</name>
+        <type>text</type>
+    </column>
+    <column>
+        <name>idproceso</name>
+        <type>integer</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>idproducto</name>
+        <type>integer</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>idvariante</name>
+        <type>integer</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>idpp</name>
+        <type>serial</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>orden</name>
+        <type>integer</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>precio</name>
+        <type>double precision</type>
+    </column>
+    <constraint>
+        <name>ca_productos_procesos_productos</name>
+        <type>FOREIGN KEY (idproducto) REFERENCES productos (idproducto) ON DELETE RESTRICT ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_productos_procesos_variantes</name>
+        <type>FOREIGN KEY (idvariante) REFERENCES variantes (idvariante) ON DELETE RESTRICT ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_productos_procesos_procesos</name>
+        <type>FOREIGN KEY (idproceso) REFERENCES procesos (idproceso) ON DELETE RESTRICT ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>procesos_pkey</name>
+        <type>PRIMARY KEY (idpp)</type>
+    </constraint>
+    <constraint>
+        <name>uniq_productos_procesos</name>
+        <type>UNIQUE (idvariante, idproceso, orden)</type>
+    </constraint>
+</table>

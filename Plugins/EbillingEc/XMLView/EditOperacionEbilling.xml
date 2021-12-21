@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<view>
+    <columns>
+        <group name='data' numcolumns='12' title='Informacion General' icon='fas fa-globe'>
+            <column name='code' numcolumns='2' order='100'>
+                <widget type='text' fieldname='idoperacion' readonly="true"/>
+            </column>
+            <column name='access-key' numcolumns='10' order='105'>
+                <widget type='text' fieldname='claveacceso'  readonly="true"/>
+            </column>
+            <column name='document-code' numcolumns='2' order='105'>
+                <widget type='text' fieldname='iddocumento'  readonly="true"/>
+            </column>
+            <column name='type-document' numcolumns='2' order='105'>
+                <widget type='text' fieldname='tipodocumento'  readonly="true"/>
+            </column>
+            <column name='date-generation' numcolumns='2' order='105'>
+                <widget type='text' fieldname='fechageneracion'  readonly="true"/>
+            </column>
+            <column name='date-sign' numcolumns='2' order='105'>
+                <widget type='text' fieldname='fechafirma'  readonly="true"/>
+            </column>
+            <column name='date-aut' numcolumns='2' order='105'>
+                <widget type='text' fieldname='fechaautorizacion'  readonly="true"/>
+            </column>
+        </group>
+    </columns>
+</view>

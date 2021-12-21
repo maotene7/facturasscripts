@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+ * @author Carlos García Gómez <carlos@facturascripts.com>
+ * @copyright 2015-2020, Carlos García Gómez. All Rights Reserved.
+ *
+ * View structure for EditReceta.
+ *
+ * @author Carlos Garcia Gomez  <carlos@facturascripts.com>
+ * @author Jose Antonio Cuello  <yopli2000@gmail.com>
+*/
+-->
+<view>
+    <columns>
+        <group name="data" numcolumns="12">
+            <column name="code" numcolumns="1" display="none" order="100">
+                <widget type="text" fieldname="idreceta" readonly="true" />
+            </column>
+            <column name="recipe" numcolumns="2" order="110">
+                <widget type="text" fieldname="codreceta" readonly="dinamic" required="true" />
+            </column>
+            <column name="description" order="120">
+                <widget type="text" fieldname="descripcion" />
+            </column>
+            <column name="reference" numcolumns="2" description="reference-production" order="140">
+                <widget type="autocomplete" fieldname="referencia" required="true">
+                    <values source="Variante" fieldcode="referencia" fieldtitle="descripcion"></values>
+                </widget>
+            </column>
+            <column name="quantity" numcolumns="1" order="150">
+                <widget type="number" fieldname="cantidad" min="1" required="" />
+            </column>
+            <column name="product" order="160">
+                <widget type="text" fieldname="productname" readonly="true" />
+            </column>
+            <column name="last-production" numcolumns="2" order="170">
+                <widget type="datetime" fieldname="ultimaproduccion" readonly="true" />
+            </column>
+        </group>
+        <group name="others" numcolumns="12">
+            <column name="warehouse-source" numcolumns="3" description="warehouse-source-desc" order="200">
+                <widget type="select" fieldname="codalmacen" onclick="EditAlmacen" required="true">
+                    <values source="almacenes" fieldcode="codalmacen" fieldtitle="nombre" />
+                </widget>
+            </column>
+            <column name="warehouse-target" numcolumns="3" description="warehouse-target-desc" order="210">
+                <widget type="select" fieldname="codalmacen2" onclick="EditAlmacen" required="true">
+                    <values source="almacenes" fieldcode="codalmacen" fieldtitle="nombre" />
+                </widget>
+            </column>
+            <column name="notes" order="230">
+                <widget type="textarea" fieldname="observaciones" />
+            </column>
+        </group>
+    </columns>
+
+    <modals>
+        <group name="produce-product" title="produce-product" icon="fas fa-cogs">
+            <column name="code" display="none" order="0">
+                <widget type="text" fieldname="idreceta" readonly="true" />
+            </column>
+            <column name="recipe" display="none" order="0">
+                <widget type="text" fieldname="codreceta" readonly="true" />
+            </column>
+            <column name="quantity" numcolumns="6" order="100">
+                <widget type="number" fieldname="quantity" min="1" required="true" />
+            </column>
+            <column name="max-produce" numcolumns="6" order="100">
+                <widget type="text" fieldname="maximum" readonly="true" />
+            </column>
+            <column name="in-stock" numcolumns="4" order="500">
+                <widget type="text" fieldname="stock" readonly="true" />
+            </column>
+            <column name="reserved" numcolumns="4" order="500">
+                <widget type="text" fieldname="reserved" readonly="true" />
+            </column>
+            <column name="available" numcolumns="4" order="500">
+                <widget type="text" fieldname="available" readonly="true" />
+            </column>
+        </group>
+    </modals>
+</view>

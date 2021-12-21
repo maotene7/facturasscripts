@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (C) ATHOS TRADER SL <info@athosonline.com>
+-->
+<table>
+    <column>
+        <name>idproceso</name>
+        <type>serial</type>
+    </column>
+    <column>
+        <name>nombre</name>
+        <type>character varying(40)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>precio</name>
+        <type>double precision</type>
+    </column>
+    <constraint>
+        <name>procesos_pkey</name>
+        <type>PRIMARY KEY (idproceso)</type>
+    </constraint>
+</table>

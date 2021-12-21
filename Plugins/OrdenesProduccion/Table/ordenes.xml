@@ -1,0 +1,80 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--
+ * Copyright (C) ATHOS TRADER SL <info@athosonline.com>
+-->
+<table>
+    <column>
+        <name>idorden</name>
+        <type>serial</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>cantidadpedida</name>
+        <type>integer</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>cantidadpendiente</name>
+        <type>integer</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>cantidadincidencia</name>
+        <type>integer</type>
+        <null>NO</null>
+        <default>0</default>
+    </column>
+    <column>
+        <name>idproceso</name>
+        <type>integer</type>
+        <null>YES</null>
+    </column>
+    <column>
+        <name>estado</name>
+        <type>integer</type>
+        <null>NO</null>
+        <default>0</default>
+    </column>
+    <column>
+        <name>idtarea</name>
+        <type>integer</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>descripcion</name>
+        <type>text</type>
+        <null>YES</null>
+    </column>
+    <column>
+        <name>fechafinalizacion</name>
+        <type>date</type>
+        <null>YES</null>
+    </column>
+    <column>
+        <name>cronometro</name>
+        <type>boolean</type>
+        <null>NO</null>
+        <default>false</default>
+    </column>
+    <column>
+        <name>parentidorden</name>
+        <type>integer</type>
+        <null>YES</null>
+    </column>
+    <constraint>
+        <name>ordenes_pkey</name>
+        <type>PRIMARY KEY (idorden)</type>
+    </constraint>
+    <constraint>
+        <name>ca_ordenes_tareas</name>
+        <type>FOREIGN KEY (idtarea) REFERENCES tareas (idtarea) ON DELETE RESTRICT ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_ordenes_procesos</name>
+        <type>FOREIGN KEY (idproceso) REFERENCES procesos (idproceso) ON DELETE RESTRICT ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_ordenes_ordenes</name>
+        <type>FOREIGN KEY (parentidorden) REFERENCES ordenes (idorden) ON DELETE RESTRICT ON UPDATE CASCADE</type>
+    </constraint>
+</table>

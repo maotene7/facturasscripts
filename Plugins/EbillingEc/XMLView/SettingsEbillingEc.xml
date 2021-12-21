@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<view>
+    <columns>
+        <group name="conta_options" numcolumns="12" title="Configuración BitMedia eBilling API" icon="fas fa-at">
+            <column name="Api Domain" numcolumns="12" order="100">
+                <widget type="text" fieldname="api_domain"/>
+            </column>
+            <column name="name" display="none" order="0">
+                <widget type="text" fieldname="name" readonly="true" required="true"/>
+            </column>
+            <column name="apikey" numcolumns="12" order="120">
+                <widget type="text" fieldname="apikey" />
+            </column>
+        </group>
+        <group name="conta_params" numcolumns="12" title="Parámetros generales">
+            <column name="Obligado Contabilidad" numcolumns="6" order="100">
+                <widget type="select" fieldname="require_accounting" required="true">
+                    <values title="SI">true</values>
+                    <values title="NO">false</values>
+                </widget>
+            </column>
+            <column name="Ambiente" numcolumns="6" order="100">
+                <widget type="select" fieldname="env" required="true">
+                    <values title="Pruebas">1</values>
+                    <values title="Producción">2</values>
+                </widget>
+            </column>
+            <column name="Número Contribuyente Especial">
+                <widget type="text" fieldname="num_contriespecial"/>
+            </column>
+            <column name="Agente de retención">
+                <widget type="text" fieldname="numagent"/>
+            </column>
+            <column name="Régimen">
+                <widget type="text" fieldname="regimen"/>
+            </column>
+        </group>
+        <group name="conta_cron" numcolumns="12" title="Parámetros CRON">
+            <column name="Code empresa" numcolumns="6" order="100">
+                    <widget type="text" fieldname="cron_code_empresa"/>
+            </column>
+            <column name="Code nick" numcolumns="6" order="100">
+                <widget type="text" fieldname="cron_code_nick"/>
+            </column>
+            <column name="Fecha desde" numcolumns="6" order="100">
+                <widget type="date" fieldname="cron_date_since"/>
+            </column>
+            <column name="Fecha hasta" numcolumns="6" order="100">
+                <widget type="date" fieldname="cron_date_until"/>
+            </column>
+            <column name="Regenerar Documentos" numcolumns="6" order="100">
+                <widget type="checkbox" fieldname="cron_regen_docs"/>
+            </column>
+            <column name="Enviar correo electronico" numcolumns="6" order="100">
+                <widget type="checkbox" fieldname="cron_email_sents"/>
+            </column>
+            <column name="Generar operaciones automáticamente" numcolumns="6" order="100">
+                <widget type="checkbox" fieldname="documents_automatic"/>
+            </column>
+        </group>
+    </columns>
+    <rows>
+        <row type="actions">
+            <button type="action" label="test" color="info" action="testebilling-ec" icon="fas fa-envelope" />
+        </row>
+    </rows>
+</view>

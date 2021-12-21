@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (C) ATHOS TRADER SL <info@athosonline.com>
+-->
+<table>
+    <column>
+        <name>idio</name>
+        <type>serial</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>idincidencia</name>
+        <type>integer</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>idorden</name>
+        <type>integer</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>cantidadincidencia</name>
+        <type>integer</type>
+        <null>NO</null>
+    </column>
+    <constraint>
+        <name>incidencias_ordenes_pkey</name>
+        <type>PRIMARY KEY (idio)</type>
+    </constraint>
+    <constraint>
+        <name>uniq_incidencias_ordenes</name>
+        <type>UNIQUE (idincidencia, idorden)</type>
+    </constraint>
+    <constraint>
+        <name>ca_incidencias_ordenes_incidencias</name>
+        <type>FOREIGN KEY (idincidencia) REFERENCES incidencias (idincidencia) ON DELETE RESTRICT ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_incidencias_ordenes_ordenes</name>
+        <type>FOREIGN KEY (idorden) REFERENCES ordenes (idorden) ON DELETE RESTRICT ON UPDATE CASCADE</type>
+    </constraint>
+</table>

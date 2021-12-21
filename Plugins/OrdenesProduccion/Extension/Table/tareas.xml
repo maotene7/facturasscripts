@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (C) ATHOS TRADER SL <info@athosonline.com>
+-->
+<table>
+    <column>
+        <name>idvariante</name>
+        <type>integer</type>
+    </column>
+    <constraint>
+        <name>ca_tareas_variantes</name>
+        <type>FOREIGN KEY (idvariante) REFERENCES variantes (idvariante) ON DELETE RESTRICT ON UPDATE CASCADE</type>
+    </constraint>
+</table>

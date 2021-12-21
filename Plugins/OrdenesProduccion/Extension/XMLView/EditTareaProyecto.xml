@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (C) ATHOS TRADER SL <info@athosonline.com>
+-->
+<view>
+    <columns>
+        <group name="main">
+            <column name="variant" order="500">
+                <widget type="autocomplete" fieldname="idvariante" readonly="dinamic">
+                    <values source="variantes" fieldcode="idvariante" fieldtitle="referencia"></values>
+                </widget>
+            </column>
+        </group>
+    </columns>
+</view>

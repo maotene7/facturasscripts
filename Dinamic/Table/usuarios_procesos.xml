@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (C) ATHOS TRADER SL <info@athosonline.com>
+-->
+<table>
+    <column>
+        <name>idup</name>
+        <type>serial</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>idproceso</name>
+        <type>integer</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>nick</name>
+        <type>character varying(50)</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>precio</name>
+        <type>double precision</type>
+    </column>
+    <constraint>
+        <name>usuarios_procesos_pkey</name>
+        <type>PRIMARY KEY (idup)</type>
+    </constraint>
+    <constraint>
+        <name>uniq_usuarios_procesos</name>
+        <type>UNIQUE (nick, idproceso)</type>
+    </constraint>
+    <constraint>
+        <name>ca_usuarios_procesos_procesos</name>
+        <type>FOREIGN KEY (idproceso) REFERENCES procesos (idproceso) ON DELETE RESTRICT ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_usuarios_procesos_users</name>
+        <type>FOREIGN KEY (nick) REFERENCES users (nick) ON DELETE RESTRICT ON UPDATE CASCADE</type>
+    </constraint>
+</table>

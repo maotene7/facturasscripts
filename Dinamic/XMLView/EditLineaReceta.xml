@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+ * @author Carlos García Gómez <carlos@facturascripts.com>
+ * @copyright 2015-2020, Carlos García Gómez. All Rights Reserved.
+ *
+ * View structure for EditLineaReceta.
+ *
+ * @author Carlos Garcia Gomez  <carlos@facturascripts.com>
+ * @author Jose Antonio Cuello  <yopli2000@gmail.com>
+*/
+-->
+<view>
+    <columns>
+        <group name="data" numcolumns="12">
+            <column name="code" numcolumns="1" display="none" order="100">
+                <widget type="number" fieldname="idlinea" readonly="true"/>
+            </column>
+            <column name="recipe" numcolumns="1" display="none" order="110">
+                <widget type="number" fieldname="idreceta" readonly="true"/>
+            </column>
+            <column name="reference" numcolumns="3" description="reference-raw" order="120">
+                <widget type="autocomplete" fieldname="referencia" required="true">
+                    <values source="Variante" fieldcode="referencia" fieldtitle="descripcion"/>
+                </widget>
+            </column>
+            <column name="quantity" numcolumns="1" order="130">
+                <widget type="number" fieldname="cantidad" min="0" required="true"/>
+            </column>
+            <column name="product" order="140">
+                <widget type="text" fieldname="productname" readonly="true"/>
+            </column>
+            <column name="stock" numcolumns="1" display="right" order="150">
+                <widget type="number" fieldname="stock" readonly="true"/>
+            </column>
+            <column name="available" numcolumns="1" display="right" order="160">
+                <widget type="number" fieldname="available" readonly="true"/>
+            </column>
+        </group>
+    </columns>
+</view>

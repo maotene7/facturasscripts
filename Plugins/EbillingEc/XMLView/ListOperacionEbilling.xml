@@ -1,0 +1,34 @@
+<view>
+    <columns>
+        <column name='code' order='100'>
+            <widget type='integer' fieldname='idoperacion' />
+        </column>
+        <column name='iddocument' order='100'>
+            <widget type='integer' fieldname='iddocumento' />
+        </column>
+        <column name='type' order='105'>
+            <widget type='text' fieldname='tipodocumento' />
+        </column>
+        <column name='date-generation' order='105'>
+            <widget type='date' fieldname='fechageneracion' />
+        </column>
+        <column name='date-aut' order='105'>
+            <widget type='date' fieldname='fechaautorizacion' />
+        </column>
+        <column name='env' order='105'>
+            <widget type='text' fieldname='ambiente' />
+        </column>
+    </columns>
+    <rows>
+        <row type="status">
+            <option color="success" fieldname="fechaautorizacion" title="Autorizado">notnull:</option>
+            <option color="warning" fieldname="fechaautorizacion" title="Sin Autorizar">null:</option>
+        </row>
+        <row type="actions">
+            <button type="action" label="search-documents-whitout-operation" color="warning" action="search-documents" icon="fas fa-search" />
+            <button type="action" label="generate-documents" color="primary" action="generate-documents" icon="fas fa-broom" />
+            <button type="action" label="sing-documents" color="info" action="sing-documents" icon="fas fa-signature" />
+            <button type="action" label="auth-documents" color="success" action="auth-documents" icon="fab fa-chromecast" />
+        </row>
+    </rows>
+</view>

@@ -1,0 +1,50 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--
+ * Copyright (C) ATHOS TRADER SL <info@athosonline.com>
+-->
+<table>
+    <column>
+        <name>idordencompletada</name>
+        <type>serial</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>idorden</name>
+        <type>integer</type>
+        <null>NO</null>
+    </column>
+    <column>
+        <name>cantidadprocesada</name>
+        <type>integer</type>
+        <null>NO</null>
+        <default>0</default>
+    </column>
+    <column>
+        <name>fechaprocesada</name>
+        <type>date</type>
+    </column>
+    <column>
+        <name>horaprocesada</name>
+        <type>time</type>
+    </column>
+    <column>
+        <name>nick</name>
+        <type>character varying(50)</type>
+    </column>
+    <column>
+        <name>precio</name>
+        <type>double precision</type>
+    </column>
+    <constraint>
+        <name>ca_ordenes_completadas_usuarios</name>
+        <type>FOREIGN KEY (nick) REFERENCES users (nick) ON DELETE RESTRICT ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ca_ordenes_completadas_ordenes</name>
+        <type>FOREIGN KEY (idorden) REFERENCES ordenes (idorden) ON DELETE RESTRICT ON UPDATE CASCADE</type>
+    </constraint>
+    <constraint>
+        <name>ordenes_completadas_pkey</name>
+        <type>PRIMARY KEY (idordencompletada)</type>
+    </constraint>
+</table>

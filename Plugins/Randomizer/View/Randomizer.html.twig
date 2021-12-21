@@ -1,0 +1,53 @@
+{% extends "Master/MenuTemplate.html.twig" %}
+
+{% block body %}
+    <div class="bg-light pt-5 pb-5">
+    </div>
+    <div class="container" style="margin-top: -70px;">
+        <div class="row">
+            <div class="col">
+                <div class="card shadow mb-4">
+                    <div class="card-body">
+                        <h1 class="h3 mb-5">
+                            <i class="{{ fsc.getPagedata().icon }}" aria-hidden="true"></i> {{ i18n.trans('generate-test-data') }}
+                            <a href="{{ fsc.url() }}" class="btn btn-sm btn-outline-secondary">
+                                <i class="fas fa-sync" aria-hidden="true"></i>
+                            </a>
+                        </h1>
+                        {% for title, group in fsc.buttonList %}
+                            {% if title %}
+                            <h3 class="mt-4">{{ i18n.trans(title) }}</h3>
+                            <hr/>
+                            {% endif %}
+                            <div class="form-row">
+                                {% for item in group %}
+                                    {{ _self.genButton(fsc, item.action, i18n, item.icon, item.label) }}
+                                {% endfor %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block css %}
+    {{ parent() }}
+    <style>
+        .bg-header {
+            background-color: #FAFBFC;
+        }
+    </style>
+{% endblock %}
+
+{% macro genButton(fsc, gen, i18n, icon, label) %}
+    <div class="col-sm-4">
+        <a href="{{ fsc.url() }}?gen={{ gen }}" class="btn btn-block btn-outline-success mb-3">
+            <i class="{{ icon }}" aria-hidden="true"></i>&nbsp; {{ i18n.trans(label) }}
+            {% if fsc.totalCounter[gen] > 0 %}
+                <span class="badge badge-success">{{ fsc.totalCounter[gen] }}</span>
+            {% endif %}
+        </a>
+    </div>
+{% endmacro %}

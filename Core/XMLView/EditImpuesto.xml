@@ -43,12 +43,12 @@
                 <widget type="number" decimal="2" fieldname="recargo" required="true" />
             </column>
             <column name="impacted-tax-subaccount" description="optional" titleurl="ListCuenta" order="150">
-                <widget type="autocomplete" fieldname="codsubcuentarep">
+                <widget type="select" fieldname="codsubcuentarep">
                     <values source="subcuentas" fieldcode="codsubcuenta" />
                 </widget>
             </column>
             <column name="supported-tax-subaccount" description="optional" titleurl="ListCuenta" order="160">
-                <widget type="autocomplete" fieldname="codsubcuentasop">
+                <widget type="select" fieldname="codsubcuentasop">
                     <values source="subcuentas" fieldcode="codsubcuenta" />
                 </widget>
             </column>

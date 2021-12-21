@@ -1,0 +1,16 @@
+<view>
+    <columns>
+        <column name="Establecimiento" order="100">
+            <widget type="text" fieldname="estab" />
+        </column>
+        <column name="Pto.Emisión" order="100">
+            <widget type="text" fieldname="terminal" />
+        </column>
+        <column name="Electrónica?" order="120">
+            <widget type="checkbox" fieldname="ebilling" />
+        </column>
+        <column name="address" order="100">
+            <widget type="text" fieldname="address"/>
+        </column>
+    </columns>
+</view>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Copyright (C) ATHOS TRADER SL <info@athosonline.com>
+-->
+<view>
+    <columns>
+        <column name="code" display="none" order="100">
+            <widget type="text" fieldname="idup"/>
+        </column>
+        <column name="user" display="none" order="110">
+            <widget type="text" fieldname="nick"/>
+        </column>
+        <column name="process" order="120">
+            <widget type="select" fieldname="idproceso" onclick="EditProceso" required="true">
+                <values source="procesos" fieldcode="idproceso" fieldtitle="nombre"/>
+            </widget>
+        </column>
+        <column name="price-hour" order="130">
+            <widget type="money" fieldname="precio"/>
+        </column>
+    </columns>
+</view>

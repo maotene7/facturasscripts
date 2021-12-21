@@ -1,0 +1,361 @@
+{#
+    /*
+    * Copyright (C) ATHOS TRADER SL <info@athosonline.com>
+    */
+#}
+
+{% extends "Master/MenuTemplate.html.twig" %}
+
+{% block body %}
+    <style type="text/css">
+        .modal-space-bottom {
+            margin-bottom: 10px;
+        }
+        
+        .modal-content * {
+            text-align: center;
+        }
+        
+        .modal-footer, .modal-header {
+            display: inline;
+        }
+    </style>
+    
+    <div class="container-fluid mb-2">
+        {{ parent() }}
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="btn-group d-xs-none">
+                    <a class="btn btn-sm btn-outline-secondary" href="{{ fsc.url() }}" title="{{ i18n.trans('refresh') }}">
+                        <i class="fas fa-redo" aria-hidden="true"></i>
+                    </a>
+                    {% if fsc.getPageData()['name'] == fsc.user.homepage %}
+                        <a class="btn btn-sm btn-outline-secondary active" href="{{ fsc.url() }}?defaultPage=FALSE" title="{{ i18n.trans('marked-as-homepage') }}">
+                            <i class="fas fa-bookmark" aria-hidden="true"></i>
+                        </a>
+                    {% else %}
+                        <a class="btn btn-sm btn-outline-secondary" href="{{ fsc.url() }}?defaultPage=TRUE" title="{{ i18n.trans('mark-as-homepage') }}">
+                            <i class="far fa-bookmark" aria-hidden="true"></i>
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-sm text-right">
+                <h1 class="h3">
+                    {% set title = i18n.trans(fsc.getPageData()['title']) | capitalize %}
+                    {{ title }} <i class="{{ fsc.getPageData()['icon'] }}" aria-hidden="true"></i>
+                </h1>
+            </div>
+        </div>
+    </div>
+                
+    {% set allProcesos = fsc.allProcesos() %}
+    {% set allOrdenes = fsc.allOrdenes() %}
+    
+    <ul class="nav nav-tabs procesos" role="tablist">
+        {% set divClass = 'active' %}
+        {% for proceso in allProcesos %}
+            <li class="nav-item">
+                <a class="nav-link {{ divClass }}" data-toggle="tab" href="#proceso{{ proceso.idproceso }}" aria-controls="proceso{{ proceso.idproceso }}" role="tab">
+                    <i class="fas fa-tasks fa-fw" aria-hidden="true"></i> {{ proceso.proceso }}
+                    <span class="badge badge-secondary">{{ proceso.count }}</span>
+                </a>
+            </li>
+            {% set divClass = '' %}
+        {% endfor %}
+    </ul>
+        
+    <div class="tab-content">
+        {% set divClass = 'show active' %}
+        {% for proceso in allProcesos %}
+            <div class="tab-pane fade {{ divClass }}" id="proceso{{ proceso.idproceso }}" aria-labelledby="proceso{{ proceso.idproceso }}-tab" role="tabpanel">
+                {{ _self.showOrdenes(fsc, i18n, allOrdenes, proceso.idproceso) }}
+            </div>
+            {% set divClass = '' %}
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+        var timeSession = parseInt("{{fsc.getTimeSession()}}");
+        
+        if (timeSession > 0) {
+            var time = new Date().getTime();
+
+            $(document.body).bind("mousemove keypress", function(e) {
+                time = new Date().getTime();
+            });
+
+            function refresh() {
+                if(new Date().getTime() - time >= timeSession) 
+                    window.location.reload(true);
+                else 
+                    setTimeout(refresh, 10000);
+            }
+
+            setTimeout(refresh, 10000);
+        }
+               
+        $(document).on('click', 'tbody.procesos tr .btn', function(){
+            //modalHTML($(this));
+            var action = $(this).attr('action');
+            
+            switch (action) {
+                case 'incidencia':
+                    procesar($(this));
+                    break;
+                
+                case 'procesar':
+                    procesar($(this));
+                    break;
+                
+                case 'iniciar':
+                    cronometrar($(this));
+                    break;
+                    
+                case 'parar':
+                    cronometrar($(this));
+                    break;
+            }
+        });
+        
+        function cronometrar(btn) {
+            var action = $(btn).attr('action');
+            var idorden = $(btn).attr('idorden');
+            var icon = $(btn).find('i');
+            
+            $(icon).removeClass('fa-check');
+            $(icon).addClass('fa-spinner fa-spin');
+            
+            var datos = {
+                'idorden' : idorden,
+                'action' : action
+            };
+
+            $.ajax({
+                type: "POST",
+                url: "{{fsc.url()}}",
+                dataType: "json",
+                data: datos,
+                success: function (results) {
+                    if (results['result']) {
+                        btnActions(idorden, results['cronometro']);
+                        
+                        var mensaje = "{{ i18n.trans('order-work-start') }}";
+                        if (results['cronometro'] === 0) {
+                            mensaje = "{{ i18n.trans('order-work-stop') }}";
+                        }
+                        
+                        bootbox.dialog({
+                            message: mensaje,
+                            centerVertical: true,
+                        });
+                   }
+
+                    $(icon).removeClass('fa-spinner fa-spin');
+                    $(icon).addClass('fa-check');
+                },
+                error: function (xhr, status, error) {
+                    $(icon).removeClass('fa-spinner fa-spin');
+                    $(icon).addClass('fa-check');
+                }
+            });
+        }
+        
+        function procesar(btn) {
+            var action = $(btn).attr('action');
+            var idorden = $(btn).attr('idorden');
+            var tr = $('.procesos #'+idorden);
+            var icon = $(btn).find('i');
+            var title = '';
+            
+            $(icon).removeClass('fa-check');
+            $(icon).addClass('fa-spinner fa-spin');
+            
+            var empresa = $(tr).find('.empresa').html();
+            var proyecto = $(tr).find('.proyecto').html();
+            var tarea = $(tr).find('.tarea').html();
+            var proceso = $(tr).find('.proceso').html();
+            var qty = $(tr).find('.qty').html();
+
+            var html = '<div class="modal-space-bottom"><strong>{{ i18n.trans('company') }}</strong><div>'+empresa+'</div></div>'+
+                    '<div class="modal-space-bottom"><strong>{{ i18n.trans('project') }}</strong><div>'+proyecto+'</div></div>'+
+                    '<div class="modal-space-bottom"><strong>{{ i18n.trans('task') }}</strong><div>'+tarea+'</div></div>'+
+                    '<div class="modal-space-bottom"><strong>{{ i18n.trans('process') }}</strong><div>'+proceso+'</div></div>'+
+                    '<div class="modal-space-bottom"><strong>{{ i18n.trans('amount-requested') }}</strong><div>'+qty+'</div></div>';
+
+            if (action === 'procesar') {
+                title = "{{ i18n.trans('prosecute-order-work') }}";
+                html = html + '<div class="form-group"><label>{{ i18n.trans('amount-processed') }}</label><input type="number" id="modalQty" value="'+qty+'" class="form-control" min="1" max="'+qty+'" required="true"></div>';
+            } else {
+                title = "{{ i18n.trans('new-incidence') }}";
+                html = html + '<div class="form-group"><label>{{ i18n.trans('amount-incidence') }}</label><input type="number" id="modalQty" value="1" class="form-control" min="1" max="'+qty+'" required="true"></div>'+
+                    '<div class="form-group"><label>{{ i18n.trans('observations') }}</label><textarea rows="3" id="modalObs" class="form-control" required="true"></textarea></div>';
+            }
+
+            bootbox.dialog({
+                title: title,
+                message: html,
+                closeButton: false,
+                centerVertical: true,
+                buttons: {
+                    cancel: {
+                        label: "<i class='fas fa-times'></i> {{ i18n.trans('cancel') }}",
+                        callback: function(){
+                            $(icon).removeClass('fa-spinner fa-spin');
+                            $(icon).addClass('fa-check');
+                        }
+                    },
+                    ok: {
+                        label: "<i class='fas fa-check'></i> {{ i18n.trans('save') }}",
+                        className: 'btn-success',
+                        callback: function(){
+                            var datos = {
+                                'idorden' : idorden,
+                                'cantidad' : $('#modalQty').val(),
+                                'action' : action
+                            };
+                            
+                            if ($('#modalObs')) {
+                                datos['observaciones'] = $('#modalObs').val();
+                            }
+
+                            if (datos['cantidad'] > qty) {
+                                datos['cantidad'] = qty;
+                            }
+
+                            $.ajax({
+                                type: "POST",
+                                url: "{{fsc.url()}}",
+                                dataType: "json",
+                                data: datos,
+                                success: function (results) {
+                                    if (results['result']) {
+                                        var resto =  qty - datos['cantidad'];
+
+                                        if (resto === 0) {
+                                            $(tr).find('td').remove().fadeOut();
+                                            var tab = $('.nav-tabs .active .badge');
+                                            var cont = parseInt($(tab).html()) - 1;
+                                            $(tab).html(cont);
+
+                                            if (action === 'procesar') {
+                                                $(tr).addClass('table-success').html('<td colspan="7" class="text-center"><i class="fa fa-check"></i> {{ i18n.trans('order-work-processed') }}</td>').fadeIn();
+                                            } 
+                                        } else {
+                                            $(tr).find('.qty').html(resto);
+                                        }
+
+                                        var mensaje = '';
+                                        if (action === 'procesar') {
+                                            mensaje = "{{ i18n.trans('order-work-processed') }}";
+                                        } else {
+                                            mensaje = "{{ i18n.trans('incidence-created') }}";
+                                        }
+
+                                        bootbox.dialog({
+                                            message: mensaje,
+                                            centerVertical: true,
+                                        });
+                                    }
+
+                                    $(icon).removeClass('fa-spinner fa-spin');
+                                    $(icon).addClass('fa-check');
+                                },
+                                error: function (xhr, status, error) {
+                                    $(icon).removeClass('fa-spinner fa-spin');
+                                    $(icon).addClass('fa-check');
+                                }
+                            });
+                        }
+                    }
+                }
+            });
+        }
+        
+        function btnActions(idorden, cronometro) {
+            var tr = $('.procesos #'+idorden);
+            
+            if (cronometro === 1) {
+                $(tr).find('.iniciar').hide();
+                $(tr).find('.parar').show();
+                $(tr).find('.procesar').hide();
+                $(tr).find('.incidencia').hide();
+            } else {
+                $(tr).find('.iniciar').show();
+                $(tr).find('.parar').hide();
+                $(tr).find('.procesar').show();
+                $(tr).find('.incidencia').show();
+            }
+        }
+    </script>
+{% endblock %}
+    
+{% macro showOrdenes(fsc, i18n, allOrdenes, idproceso) %}
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>{{ i18n.trans('company') }}</th>
+                    <th>{{ i18n.trans('project') }}</th>
+                    <th>{{ i18n.trans('task') }}</th>
+                    <th class="d-none">{{ i18n.trans('process') }}</th>
+                    <th>{{ i18n.trans('description') }}</th>
+                    <th>{{ i18n.trans('amount-pending') }}</th>
+                    <th>{{ i18n.trans('end-date') }}</th>
+                    <th class="text-right">{{ i18n.trans('actions') }}</th>
+                </tr>
+            </thead>
+            <tbody class="procesos">
+                {% for orden in allOrdenes %}
+                    {% if idproceso == orden.idproceso %}
+                        <tr id="{{ orden.idorden }}">
+                            <td class="empresa align-middle">{{ orden.empresa }}</td>
+                            <td class="proyecto align-middle">
+                                <div>{{ orden.proyecto }}</div>
+                                <div><i>{{ orden.descproyecto[0:50] }}</i></div>
+                            </td>
+                            <td class="tarea align-middle">
+                                <div>{{ orden.tarea }}</div>
+                                <div><i>{{ orden.desctarea[0:50] }}</i></div>
+                            </td>
+                            <td class="proceso d-none align-middle">{{ orden.proceso }}</td>
+                            <td class="desc align-middle">{{ orden.descripcion }}</td>
+                            <td class="qty align-middle">{{ orden.cantidadpendiente }}</td>
+                            <td class="fechafinalizacion align-middle">{{ orden.fechafinalizacion }}</td>
+                            <td class="botones text-right align-middle">
+                                <span class="btn-group">                                    
+                                    <a class="btn btn-lg btn-info iniciar" href="#" action="iniciar" idorden="{{ orden.idorden }}">
+                                        <i class="fas fa-hourglass-start fa-fw" aria-hidden="true"></i> 
+                                        <span class="d-none d-sm-inline-block">{{ i18n.trans('start') }}</span>
+                                    </a>
+
+                                    <a class="btn btn-lg btn-danger parar" href="#" action="parar" idorden="{{ orden.idorden }}">
+                                        <i class="fas fa-hourglass-end fa-fw" aria-hidden="true"></i> 
+                                        <span class="d-none d-sm-inline-block">{{ i18n.trans('stop') }}</span>
+                                    </a>
+                                    
+                                    <a class="btn btn-lg btn-success procesar" href="#" action="procesar" idorden="{{ orden.idorden }}">
+                                        <i class="fas fa-check fa-fw" aria-hidden="true"></i>
+                                        <span class="d-none d-sm-inline-block">{{ i18n.trans('prosecute') }}</span>
+                                    </a>
+                                    
+                                    <a class="btn btn-lg btn-warning incidencia" href="#" action="incidencia" idorden="{{ orden.idorden }}">
+                                        <i class="fas fa-exclamation fa-fw" aria-hidden="true"></i>
+                                        <span class="d-none d-sm-inline-block">{{ i18n.trans('incidence') }}</span>
+                                    </a>
+                                    
+                                    <script>
+                                        btnActions({{ orden.idorden }}, {{ orden.cronometro }});
+                                    </script>
+                                </span>
+                            </td>
+                        </tr>   
+                    {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endmacro %}

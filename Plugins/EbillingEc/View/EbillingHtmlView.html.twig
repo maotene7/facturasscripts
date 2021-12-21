@@ -1,0 +1,36 @@
+{% if view.model.fechaautorizacion != null %}
+<div class="card">
+    <div class="card-body">
+        <p>Clave de acceso: {{ view.model.claveacceso }} <br>
+        Fecha de Autorización: {{ view.model.fechaautorizacion }} <br>
+        Fecha de Generación: {{ view.model.fechageneracion }}</p>
+        <p><a href="https://srienlinea.sri.gob.ec/comprobantes-electronicos-internet/publico/validezComprobantes.jsf">Url SRI</a><br></p>
+
+        <h2>Documento generado de forma exitosa</h2>
+        <p>Puedes elegir cualquiera de las siguientes opciones:</p>
+        <button class="btn btn-warning" id="getXml" data-type="{{ view.type }}" data-id="{{ view.documentId }}" type="button">Descargar XML</button>
+        <button class="btn btn-danger" id="print" data-type="{{ view.type }}" data-id="{{ view.documentId }}" type="button">Descargar PDF</button>
+        <button class="btn btn-primary" id="send" data-type="{{ view.type }}" data-id="{{ view.documentId }}" type="button" title="Enviaras un correo electrónico con el xml y pdf adjunto al correo registrado en la ficha del cliente">Enviar correo electrónico</button>
+    </div>
+</div>
+{% else %}
+    <div class="card">
+        <h2>Gestionar documentos electrónicos</h2>
+        <p style="padding-left:20px;">
+            {% if view.model.fechageneracion != null %}
+                <i><b>1</b> Documento Generado</i>
+                <br>
+            {% endif %}
+            {% if view.model.fechafirma != null  %}
+                <i><b>2</b> Documento Firmado</i><br>
+            {% endif %}
+        </p>
+        <div class="card-body">
+            <p>Selecciona una opción</p>
+            <button class="btn btn-warning" id="reload" data-type="{{ view.type }}" data-id="{{ view.documentId }}" title="Consulta el estado del documento"><i class="fas fa-retweet"></i> Refrescar</button>
+            <button class="btn btn-primary" id="generate" data-type="{{ view.type }}" data-id="{{ view.documentId }}"><i class="fas fa-edit"></i> Generar</button>
+            <button class="btn btn-warning" id="sign" data-type="{{ view.type }}" data-id="{{ view.documentId }}"><i class="fas fa-signature"></i> Firmar</button>
+            <button class="btn btn-success" id="auth" data-type="{{ view.type }}" data-id="{{ view.documentId }}"><i class="fas fa-paper-plane"></i> Enviar</button>
+        </div>
+    </div>
+{% endif %}

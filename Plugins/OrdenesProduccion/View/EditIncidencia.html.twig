@@ -1,0 +1,226 @@
+{#
+    /*
+    * Copyright (C) ATHOS TRADER SL <info@athosonline.com>
+    */
+#}
+
+{% extends "Master/MenuTemplate.html.twig" %}
+
+{% set pageData = fsc.getPageData() %}
+{% set incidencia = fsc.getIncidencia() %}
+{% set ordenesTarea = fsc.getOrdenesTarea(incidencia.idtarea) %}
+{% set tarea = fsc.getTarea(ordenesTarea[0].idtarea) %}
+{% set proyecto = fsc.getProyecto(tarea.idproyecto) %}
+{% set ordenesIncidencia = fsc.getOrdenesIncidencia(incidencia.idincidencia) %}
+
+{% block body %}
+    <div class="container-fluid mb-2">
+        {{ parent() }}
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="btn-group d-xs-none">
+                    <a id="btn-atras" href="ListIncidencia" class="btn btn-sm btn-outline-secondary">
+                        <i class="fas fa-list fa-fw" aria-hidden="true"></i>
+                        <span class="d-none d-lg-inline-block">{{ i18n.trans('all') }}</span>
+                    </a>
+                    <a class="btn btn-sm btn-outline-secondary" href="{{ fsc.url() }}?code={{ incidencia.idincidencia }}" title="{{ i18n.trans('refresh') }}">
+                        <i class="fas fa-redo" aria-hidden="true"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="col-sm text-right">
+                <h1 class="h3">
+                    {% set title = i18n.trans(fsc.getPageData()['title']) | capitalize %}
+                    {{ title }} <i class="{{ fsc.getPageData()['icon'] }}" aria-hidden="true"></i>
+                    <br>
+                    <small class="text-info">{{ incidencia.idincidencia }}</small>
+                </h1>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container-fluid mb-2">                
+        <div class="row">
+            <div class="col-lg-3 col-sm-3 mb-2">
+                <h5>{{ i18n.trans('date') }}</h5> {{ incidencia.fecha }}
+            </div>
+                
+            <div class="col-lg-3 col-sm-3 mb-2">
+                <h5>{{ i18n.trans('user') }}</h5> {{ incidencia.nick }}
+            </div>
+                
+            <div class="ccol-lg-3 col-sm-3 mb-2">
+                <h5>{{ i18n.trans('project') }}</h5> {{ proyecto.nombre }}
+            </div>
+            
+            <div class="col-lg-3 col-sm-3 mb-2">
+                <h5>{{ i18n.trans('task') }}</h5> {{ tarea.nombre }}
+            </div>
+            
+            <div class="col-lg-12">
+                <h5>{{ i18n.trans('observations') }}</h5> {{ incidencia.observaciones }}
+            </div>
+            
+            <div class="col-lg-12 text-right mb-2">
+                <button type="button" class="btn btn-sm btn-outline-secondary" onClick="return selectNone();">
+                    {{ i18n.trans('select-none') }}
+                </button>
+                <button type="button" class="btn btn-sm btn-outline-secondary" onClick="return selectAll();">
+                    {{ i18n.trans('select-all') }}
+                </button>
+            </div>
+        </div>
+                
+        <div class="row">
+            <div class="col mt-3">
+                {{ _self.documentCard(ordenesTarea, ordenesIncidencia, incidencia, fsc, i18n) }}
+            </div>
+        </div>
+        
+        {% if incidencia.estado == 0 %}                
+                <div class="col text-right">
+                    <button id="aprobar" type="button" class="btn btn-primary">
+                        <i class="fas fa-save fa-fw"></i> {{ i18n.trans('approve-incidence') }}
+                    </button>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">        
+        function selectAll() {
+            var inputToServe = document.getElementsByClassName("to_serve");
+            var inputToBeServed = document.getElementsByClassName("to_be_served");
+            for (i = 0; i < inputToBeServed.length; i++) {
+                if (inputToServe.item(i).value > 0) {
+                    inputToBeServed.item(i).value = inputToServe.item(i).value;
+                }
+                
+                if (inputToBeServed.item(i).getAttribute('incidencia') > 0) {
+                    inputToBeServed.item(i).value = inputToBeServed.item(i).getAttribute('incidencia');
+                }
+            }
+
+            return false;
+        }
+        
+        function selectNone() {
+            var inputToBeServed = document.getElementsByClassName("to_be_served");
+            for (i = 0; i < inputToBeServed.length; i++) {
+                if (!$(inputToBeServed.item(i)).parent().hasClass('table-warning')) {
+                    inputToBeServed.item(i).value = 0;
+                }
+            }
+
+            return false;
+        }
+        
+        $(document).on('click', '#aprobar', function(){
+            var icon = $(this).find('i');
+            
+            $(icon).removeClass('fa-check');
+            $(icon).addClass('fa-spinner fa-spin');
+            
+            var ordenes = [];
+            $('#ordenes tr').each(function(){
+                var orden = {
+                    'idorden' : $(this).find('.idorden').text(),
+                    'cantidadincidencia' : $(this).find('.cantidadincidencia input').val()
+                };
+                
+                ordenes.push(orden);
+            });
+            
+            var datos = {
+                'idincidencia' : '{{ incidencia.idincidencia }}',
+                'action' : 'aprobar',
+                'ordenes' : ordenes
+            };
+            
+            $.ajax({
+                type: "POST",
+                url: "{{fsc.url()}}",
+                dataType: "json",
+                data: datos,
+                success: function (results) {
+                    var mensaje = "{{ i18n.trans('incidence-processed-ko') }}";
+                    
+                    if (results['result']) {
+                        mensaje = "{{ i18n.trans('incidence-processed-ok') }}";
+                        setTimeout(location.reload.bind(location), 1500);
+                    }
+                    
+                    bootbox.dialog({
+                        message: mensaje,
+                        centerVertical: true,
+                    });
+
+                    $(icon).removeClass('fa-spinner fa-spin');
+                    $(icon).addClass('fa-check');
+                },
+                error: function (xhr, status, error) {
+                    $(icon).removeClass('fa-spinner fa-spin');
+                    $(icon).addClass('fa-check');
+                }
+            });
+        });
+    </script>
+{% endblock %}
+
+{% macro documentCard(ordenesTarea, ordenesIncidencia, incidencia, fsc, i18n) %}
+    <div class="card shadow-sm mb-3">
+        <div class="table-responsive">
+            <table class="table table-sm table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th class="d-none">{{ i18n.trans('id') }}</th>
+                        <th>{{ i18n.trans('process') }}</th>
+                        <th class="text-right td-quantity">{{ i18n.trans('amount-requested') }}</th>
+                        <th class="text-right td-quantity">{{ i18n.trans('amount-pending') }}</th>
+                        <th class="text-right td-quantity">{{ i18n.trans('amount-incidence') }}</th>
+                    </tr>
+                </thead>
+                <tbody id="ordenes">
+                    {% for lineT in ordenesTarea %}
+                        <tr>
+                            <td class="d-none idorden">{{ lineT.idorden }}</td>
+                            <td>{{ fsc.getProceso(lineT.idproceso) }}</td>
+                            <td class="cantidadpedida">
+                                <input type="number" value="{{ lineT.cantidadpedida }}" class="form-control text-right" readonly="true"/>
+                            </td>
+                            <td class="cantidadpendiente">
+                                <input type="number" value="{{ lineT.cantidadpendiente }}" class="form-control text-right to_serve" readonly="true"/>
+                            </td>
+                            
+                            {% set css = '' %}
+                            {% set cantidad = 0 %}
+                            {% set readonly = '' %}
+                            
+                            {% for lineI in ordenesIncidencia %}                                                                
+                                {% if lineI.idorden == lineT.idorden %}
+                                    {% set css = 'table-warning' %}
+                                    {% set cantidad = lineI.cantidadincidencia %}
+                                {% endif %}
+                            {% endfor %}
+                            
+                            {% if incidencia.estado == 1 or css != '' or lineT.cantidadpendiente == 0 %}
+                                {% set readonly = 'disabled' %}
+                            {% endif %}
+                            
+                            <td class="cantidadincidencia {{ css }}">
+                                {% set newAmount = (cantidad > 0)?cantidad:lineT.cantidadpendiente %}
+                                <input type="number" incidencia="{{ newAmount }}" value="{{ cantidad }}"
+                                       min="0" max="{{ newAmount }}" step="any"
+                                       class="form-control text-right to_be_served" autocomplete="off"
+                                       {{ readonly }} />
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endmacro %}

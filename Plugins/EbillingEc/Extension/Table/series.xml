@@ -1,0 +1,18 @@
+<table>
+    <column>
+        <name>estab</name>
+        <type>varchar(3)</type>
+    </column>
+    <column>
+        <name>terminal</name>
+        <type>varchar(3)</type>
+    </column>
+    <column>
+        <name>ebilling</name>
+        <type>boolean</type>
+    </column>
+    <column>
+        <name>address</name>
+        <type>varchar(100)</type>
+    </column>
+</table>

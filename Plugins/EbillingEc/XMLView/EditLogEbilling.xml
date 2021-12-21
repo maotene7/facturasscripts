@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--
+  ~ /**
+  ~  * Copyright (C) 2021 Carlos Yanez Correa <cyanez@bitmedia.technology>
+  ~  */
+  -->
+
+<view>
+    <columns>
+        <group name='data' numcolumns='12' title='Informacion General' icon='fas fa-globe'>
+            <column name='code' numcolumns='2' order='100'>
+                <widget type='text' fieldname='idlog' readonly="true"/>
+            </column>
+            <column name='code-operation' numcolumns='2' order='100'>
+                <widget type='text' fieldname='idoperacion' readonly="true"/>
+            </column>
+            <column name='process' numcolumns='2' order='105'>
+                <widget type='text' fieldname='proceso'  readonly="true"/>
+            </column>
+            <column name='observations' numcolumns='2' order='105'>
+                <widget type='text' fieldname='mensaje'  readonly="true"/>
+            </column>
+            <column name='date' numcolumns='2' order='105'>
+                <widget type='text' fieldname='fecha'  readonly="true"/>
+            </column>
+            <column name='nick' numcolumns='2' order='105'>
+                <widget type='text' fieldname='nick'  readonly="true"/>
+            </column>
+            <column name='xml' numcolumns='12' order='105'>
+                <widget type='textarea' fieldname='xml'  readonly="true"/>
+            </column>
+        </group>
+    </columns>
+</view>

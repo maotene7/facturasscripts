@@ -1,0 +1,275 @@
+{#
+    /*
+    * Copyright (C) ATHOS TRADER SL <info@athosonline.com>
+    */
+#}
+
+{% extends "Master/MenuTemplate.html.twig" %}
+
+{% block css %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('node_modules/jquery-ui-dist/jquery-ui.min.css') }}" />
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('node_modules/jquery-ui-dist/jquery-ui.min.js') }}"></script>
+{% endblock %}
+
+{% block body %}
+    {% set allProyectos = fsc.allProyectos() %}
+    
+    <style type="text/css">
+        .card {
+            margin-bottom: 30px;
+        }
+        
+        .autocomplete {
+            /*the container must be positioned relative:*/
+            position: relative;
+            display: inline-block;
+            width: 100%;
+        }
+        .autocomplete-items {
+            position: absolute;
+            border: 1px solid #d4d4d4;
+            border-bottom: none;
+            border-top: none;
+            z-index: 99;
+            /*position the autocomplete items to be the same width as the container:*/
+            top: 100%;
+            left: 0;
+            right: 0;
+        }
+        .autocomplete-items div {
+            padding: 10px;
+            cursor: pointer;
+            background-color: #fff;
+            border-bottom: 1px solid #d4d4d4;
+        }
+        .autocomplete-items div:hover {
+            /*when hovering an item:*/
+            background-color: #e9e9e9;
+        }
+        .autocomplete-active {
+            /*when navigating through the items using the arrow keys:*/
+            background-color: DodgerBlue !important;
+            color: #ffffff;
+        }
+    </style>
+    
+    <div class="container-fluid mb-2">
+        {{ parent() }}
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="btn-group d-xs-none">
+                    <a class="btn btn-sm btn-outline-secondary" href="{{ fsc.url() }}" title="{{ i18n.trans('refresh') }}">
+                        <i class="fas fa-redo" aria-hidden="true"></i>
+                    </a>
+                    {% if fsc.getPageData()['name'] == fsc.user.homepage %}
+                        <a class="btn btn-sm btn-outline-secondary active" href="{{ fsc.url() }}?defaultPage=FALSE" title="{{ i18n.trans('marked-as-homepage') }}">
+                            <i class="fas fa-bookmark" aria-hidden="true"></i>
+                        </a>
+                    {% else %}
+                        <a class="btn btn-sm btn-outline-secondary" href="{{ fsc.url() }}?defaultPage=TRUE" title="{{ i18n.trans('mark-as-homepage') }}">
+                            <i class="far fa-bookmark" aria-hidden="true"></i>
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-sm text-right">
+                <h1 class="h3">
+                    {{ i18n.trans('report-orders-work') }} <i class="{{ fsc.getPageData()['icon'] }}" aria-hidden="true"></i>
+                </h1>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="card text-center">
+                    <div class="card-header">
+                        <h5>{{ i18n.trans('projects') }}</h5>
+                    </div>
+                    <div id="formProyectos" class="card-body">
+                            <div class="ui-widget">
+                                <label for="proyectos">{{ i18n.trans('search-project') }}</label>
+                                <input id="proyectos" value="" name="proyecto" class="form-control text-center">
+                            </div>
+
+                            <p style="margin-top:10px;" class="card-text">{{ i18n.trans('project-report-info') }}</p>
+                        
+                        <form class="autocomplete" target="_blank" type="post" action="{{ fsc.controllerName }}">
+                            <input type="hidden" name="action" value="informe-proyecto" readonly>
+                            <input class="autocomplete" type="hidden" name="idproyecto" value="" readonly>
+                            <button type="submit" class="btn btn-primary">{{ i18n.trans('generate-report') }}</button>
+                        </form>
+                    </div>
+                </div>
+                        
+                <div class="card text-center">
+                    <div class="card-header">
+                        <h5>{{ i18n.trans('incidences') }}</h5>
+                    </div>
+                    <div id="formIncidencias" class="card-body">
+                        <div class="ui-widget">
+                            <label for="inProyectos">{{ i18n.trans('search-project') }}</label>
+                            <input id="inProyectos" value="" name="proyecto" class="form-control text-center">
+                        </div>
+
+                        <p style="margin-top:10px;" class="card-text">{{ i18n.trans('incidence-project-report-info') }}</p>
+                        
+                        <form class="autocomplete" target="_blank" type="post" action="{{ fsc.controllerName }}">
+                            <input type="hidden" name="action" value="informe-incidencia-proyecto" readonly>
+                            <input class="autocomplete" type="hidden" name="idproyecto" value="" readonly>
+                            <button type="submit" class="btn btn-primary">{{ i18n.trans('generate-report') }}</button>
+                        </form>
+                        
+                        <hr/>
+                        
+                        <form class="autocomplete" target="_blank" type="post" action="{{ fsc.controllerName }}">
+                            <div class="ui-widget">
+                                <label for="inUsuarios">{{ i18n.trans('search-user') }}</label>
+                                <input id="inUsuarios" value="" name="nick" class="form-control text-center">
+                            </div>
+
+                            <p style="margin-top:10px;" class="card-text">{{ i18n.trans('incidence-user-report-info') }}</p>
+                        
+                            <input type="hidden" name="action" value="informe-incidencia-usuario" readonly>
+                            <button type="submit" class="btn btn-primary">{{ i18n.trans('generate-report') }}</button>
+                        </form>
+                        
+                        <hr/>
+                        
+                        <form class="autocomplete" target="_blank" type="post" action="{{ fsc.controllerName }}">
+                            <div class="form-group">
+                                <label for="infechainicio">{{ i18n.trans('start-date') }}</label>
+                                <input placeholder="YYYY/M/D" type="text" id="infechainicio" name="fechainicio" value="" class="form-control datepicker text-center">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="infechafin">{{ i18n.trans('end-date') }}</label>
+                                <input placeholder="YYYY/M/D" type="text" id="infechafin" name="fechafin" value="" class="form-control datepicker text-center">
+                            </div>
+
+                            <p style="margin-top:10px;" class="card-text">{{ i18n.trans('incidences-report-info') }}</p>
+                        
+                            <input type="hidden" name="action" value="informe-incidencias" readonly>
+                            <button type="submit" class="btn btn-primary">{{ i18n.trans('generate-report') }}</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+                    
+            <div class="col-lg-4">
+                <div class="card text-center">
+                    <div class="card-header">
+                        <h5>{{ i18n.trans('processes') }}</h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="formProcesos" target="_blank" type="post" action="{{ fsc.controllerName }}">
+                            <div class="form-group">
+                                <label for="prfechainicio">{{ i18n.trans('start-date') }}</label>
+                                <input placeholder="YYYY/M/D" type="text" id="prfechainicio" name="fechainicio" value="" class="form-control datepicker text-center">
+                            </div>
+                                
+                            <div class="form-group">
+                                <label for="prfechafin">{{ i18n.trans('end-date') }}</label>
+                                <input placeholder="YYYY/M/D" type="text" id="prfechafin" name="fechafin" value="" class="form-control datepicker text-center">
+                            </div>
+                                
+                            <p style="margin-top:10px;" class="card-text">{{ i18n.trans('processes-report-info') }}</p>
+                            
+                            <input type="hidden" name="action" value="informe-procesos" readonly>
+                            <button type="submit" class="btn btn-primary">{{ i18n.trans('generate-report') }}</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+                    
+            <div class="col-lg-4">
+                <div class="card text-center">
+                    <div class="card-header">
+                        <h5>{{ i18n.trans('users') }}</h5>
+                    </div>
+                    <div class="card-body">
+                        <form class="autocomplete" id="formUsuarios" target="_blank" type="post" action="{{ fsc.controllerName }}">
+                            <div class="form-group">
+                                <label for="usfechainicio">{{ i18n.trans('start-date') }}</label>
+                                <input placeholder="YYYY/M/D" type="text" id="usfechainicio" name="fechainicio" value="" class="form-control datepicker text-center">
+                            </div>
+                                
+                            <div class="form-group">
+                                <label for="usfechafin">{{ i18n.trans('end-date') }}</label>
+                                <input placeholder="YYYY/M/D" type="text" id="usfechafin" name="fechafin" value="" class="form-control datepicker text-center">
+                            </div>
+                                
+                            <div class="ui-widget">
+                                <label for="usuarios">{{ i18n.trans('search-user') }}</label>
+                                <input id="usuarios" value="" name="nick" class="form-control text-center">
+                            </div>
+                                
+                            <p style="margin-top:10px;" class="card-text">{{ i18n.trans('users-report-info') }}</p>
+                            
+                            <input type="hidden" name="action" value="informe-usuarios" readonly>
+                            <button type="submit" class="btn btn-primary">{{ i18n.trans('generate-report') }}</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+                        
+    <script type="text/javascript">
+        $(function() {
+            $('form.autocomple button').click(function(e){
+                e.preventDefault();
+                
+                var form = $(this).parent();
+                
+                if ($(form).find('input.autocomplete').val() != '') {
+                    $(form).submit();
+                }
+            });
+            
+            $( "#formIncidencias #inProyectos" ).autocomplete({
+                source: "{{ fsc.controllerName() }}?action=proyectos",
+                minLength: 2,
+                select: function( event, ui ) {
+                    $(this).val(ui.item.label);
+                    $('#formIncidencias input[name="idproyecto"]').val(ui.item.id);
+                    //console.log( "Selected: " + ui.item.value + " aka " + ui.item.id );
+                }
+            });
+            
+            $( "#formProyectos #proyectos" ).autocomplete({
+                source: "{{ fsc.controllerName() }}?action=proyectos",
+                minLength: 2,
+                select: function( event, ui ) {
+                    $(this).val(ui.item.label);
+                    $('#formProyectos input[name="idproyecto"]').val(ui.item.id);
+                    //console.log( "Selected: " + ui.item.value + " aka " + ui.item.id );
+                }
+            });
+            
+            $( "#formUsuarios #usuarios" ).autocomplete({
+                source: "{{ fsc.controllerName() }}?action=usuarios",
+                minLength: 2,
+                select: function( event, ui ) {
+                    $(this).val(ui.item.label);
+                    $('#formUsuarios input[name="nick"]').val(ui.item.id);
+                    //console.log( "Selected: " + ui.item.value + " aka " + ui.item.id );
+                }
+            });
+            
+            $( "#formIncidencias #inUsuarios" ).autocomplete({
+                source: "{{ fsc.controllerName() }}?action=usuarios",
+                minLength: 2,
+                select: function( event, ui ) {
+                    $(this).val(ui.item.label);
+                    $('#formIncidencias input[name="nick"]').val(ui.item.id);
+                    //console.log( "Selected: " + ui.item.value + " aka " + ui.item.id );
+                }
+            });
+        });
+    </script>
+{% endblock %}

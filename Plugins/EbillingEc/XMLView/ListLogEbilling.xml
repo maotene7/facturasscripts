@@ -1,0 +1,19 @@
+<view>
+    <columns>
+        <column name='code' order='100'>
+            <widget type='integer' fieldname='idlog' />
+        </column>
+        <column name='idoperacion' order='100'>
+            <widget type='integer' fieldname='idoperacion' />
+        </column>
+        <column name='process' order='105'>
+            <widget type='text' fieldname='proceso' />
+        </column>
+        <column name='message' order='105'>
+            <widget type='text' fieldname='mensaje' />
+        </column>
+        <column name='date' order='105'>
+            <widget type='datetime' fieldname='fecha' />
+        </column>
+    </columns>
+</view>
